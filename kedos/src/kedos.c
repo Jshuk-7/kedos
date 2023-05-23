@@ -3,20 +3,35 @@
 
 #include <time.h>
 
-real_t DATA[] = {
+real_t SUM_DATA[] = {
+	0, 0,  0, 0,  0, 0,
+	0, 0,  0, 1,  0, 1,
+	0, 1,  0, 1,  1, 0,
+	0, 1,  1, 0,  1, 1,
+};
+
+real_t XOR_DATA[] = {
 	0, 0, 0,
 	0, 1, 1,
 	1, 0, 1,
 	1, 1, 0,
 };
 
+real_t OR_DATA[] = {
+	0, 0, 0,
+	0, 1, 1,
+	1, 0, 1,
+	1, 1, 1,
+};
+
 int main(void) {
 	srand(time(0));
 
-	Matrix input = { .rows = 4, .cols = 2, .stride = 3, .elems = DATA };
-	Matrix output = { .rows = 4, .cols = 1, .stride = 3, .elems = &DATA[2] };
+	real_t* data = XOR_DATA;
+	Matrix input = { .rows = 4, .cols = 2, .stride = 3, .elems = data };
+	Matrix output = { .rows = 4, .cols = 1, .stride = 3, .elems = &data[2] };
 
-	size_t arch[] = { 2, 2, 1 };
+	size_t arch[] = { 2, 4, 1 };
 	NeuralNetwork nn = kedos_neural_network_alloc(arch, K_ARRAY_COUNT(arch));
 	NeuralNetwork g = kedos_neural_network_alloc(arch, K_ARRAY_COUNT(arch));
 	kedos_neural_network_rand(nn, 0, 1);
@@ -30,6 +45,10 @@ int main(void) {
 		kedos_neural_network_learn(nn, g, learning_rate);
 		printf("%zu cost %f\n", i, kedos_neural_network_cost(nn, input, output));
 	}
+
+	printf("--------------------------------------\n");
+
+	K_NETWORK_PRINT(nn);
 
 	printf("--------------------------------------\n");
 
