@@ -1,5 +1,5 @@
 #define KEDOS_IMPLEMENTATION
-#include "kedos.h"
+#include "../include/kedos.h"
 
 #include <time.h>
 
